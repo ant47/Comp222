@@ -1,4 +1,4 @@
-/*Anthony Yanik
+/*
 Comp 222
 Assignment/Project #4
 Virtual Memory
@@ -17,7 +17,6 @@ int contentsOfAddress;
 int numPages;
 int numFrames;
 
-//void shiftPageTable(int index);
 
 int choice;//user selection for options
 
