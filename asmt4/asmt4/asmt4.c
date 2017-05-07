@@ -11,13 +11,7 @@ Virtual Memory
 int sizeOfMainMemory;
 int sizeOfPage;
 int replacementPolicy;//Can be either 1 or 0
-
-int mainMemoryAddress;
-int contentsOfAddress;
 int numPages;
-int numFrames;
-
-
 int choice;//user selection for options
 
 struct pageTable {
@@ -43,6 +37,7 @@ void enterParameters() {
 
 	int i;
 	for (i = 0; i < numPages; i++) {
+		//Flag each index as -1
 		memory[i].pageFrame = -1;
 		memory[i].virtualPage = -1;
 	}
@@ -60,6 +55,7 @@ void mapVA() {
 	printf("Enter virtual memory address to access: ");
 	scanf("%d", &VMAddress);
 
+	//Calculate offset and virtual page
 	offset = VMAddress % sizeOfPage;
 	virtualPage = VMAddress / sizeOfPage;
 
@@ -74,7 +70,7 @@ void mapVA() {
 				int vpHolder;//placeholder for virtualpage
 				int g;
 				for (g = i; g < numPages - 1; g++) {
-					//Shift page table 
+					//Shift page table at index of hit
 					pfHolder = memory[g].pageFrame;
 					vpHolder = memory[g].virtualPage;
 					memory[g] = memory[g + 1];
@@ -91,12 +87,13 @@ void mapVA() {
 			printf("Page fault!\n");
 			i = numPages - 1;
 		}
-		else if (i == numPages - 1) {
+		else if (i == numPages - 1) {//condition for last element 
 			memory[0].virtualPage = virtualPage;
 			int pfHolder;//placeholder for pageframe
 			int vpHolder;//placeholder for virtualpage
 			int h;
 			for (h = 0; h < numPages - 1; h++) {
+				//shift page table from beginning
 				pfHolder = memory[h].pageFrame;
 				vpHolder = memory[h].virtualPage;
 				memory[h] = memory[h + 1];
