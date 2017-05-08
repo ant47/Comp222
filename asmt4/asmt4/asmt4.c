@@ -1,4 +1,5 @@
 /*
+Anthony Yanik
 Comp 222
 Assignment/Project #4
 Virtual Memory
@@ -33,11 +34,11 @@ void enterParameters() {
 	numPages = sizeOfMainMemory / sizeOfPage;
 
 	memory = (struct pageTable *)malloc(numPages * sizeof(struct pageTable));
-
+	
 
 	int i;
 	for (i = 0; i < numPages; i++) {
-		//Flag each index as -1
+		//Flag each member of struct's index as -1
 		memory[i].pageFrame = -1;
 		memory[i].virtualPage = -1;
 	}
@@ -61,10 +62,10 @@ void mapVA() {
 
 	int i;
 	for (i = 0; i < numPages; i++) {
-		//if there is a hit
+		//if there is a hit (page in memory)
 		if (memory[i].virtualPage == virtualPage) {
 			realAddress = (memory[i].pageFrame * sizeOfPage) + offset;
-
+			//LRU
 			if (replacementPolicy == 0) {
 				int pfHolder;//placeholder for pageframe
 				int vpHolder;//placeholder for virtualpage
@@ -81,10 +82,14 @@ void mapVA() {
 			printf("Virtual Address: %d maps to physical address %d", VMAddress,realAddress);
 			i = numPages-1;
 		}
+		//if theres a blank space
 		else if (memory[i].virtualPage == -1) {
+			//map virtual page to generated virtual page
 			memory[i].virtualPage = virtualPage;
+			//map pageframe to current index
 			memory[i].pageFrame = i;
 			printf("Page fault!\n");
+			//set index to last element
 			i = numPages - 1;
 		}
 		else if (i == numPages - 1) {//condition for last element 
@@ -121,10 +126,10 @@ void mapVA() {
 
 
 int main() {
-	printf("Virtual memory to Main memory mapping:\n");
-	printf("------------------------------------\n");
 	int boolean = 0;
 	while (!boolean) {
+		printf("Virtual memory to Main memory mapping:\n");
+		printf("------------------------------------\n");
 		printf("1) Enter parameters\n");
 		printf("2) Map virtual address \n");
 		printf("3) Quit: \n");
